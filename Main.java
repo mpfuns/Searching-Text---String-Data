@@ -1,7 +1,70 @@
 import java.util.Scanner;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Main {
  
+// Simple TNode class definition
+
+static class TNode {
+    String value;
+    TNode left, right;
+    List<TNode> nodeList; // For trie-like children
+
+    TNode() {
+        this.value = null;
+        this.left = null;
+        this.right = null;
+        this.nodeList = new ArrayList<>();
+    }
+
+    TNode(String value) {
+        this.value = value;
+        this.left = null;
+        this.right = null;
+        this.nodeList = new ArrayList<>();
+    }
+
+    // New constructor to accept a char
+    TNode(char value) {
+        this.value = String.valueOf(value);
+        this.left = null;
+        this.right = null;
+        this.nodeList = new ArrayList<>();
+    }
+
+    // Method to find a child node with the given char
+    public TNode subNode(char c) {
+        for (TNode child : this.nodeList) {
+            if (child.value != null && child.value.equals(String.valueOf(c))) {
+                return child;
+            }
+        }
+        return null;
+    }
+    //add method to add a new word to the trie structure 
+    public void add(String theWord) {
+        TNode myNode = usaTree;
+        for (char theChar : theWord.toCharArray()) {
+            TNode childNode = myNode.subNode(theChar);
+            if (childNode != null)
+                myNode = childNode;
+            else {
+                TNode newChild = new TNode(theChar);
+                myNode.nodeList.add(newChild);
+                myNode = newChild;
+            }
+        }
+    }
+}
+
+
+static TNode usaTree = new TNode(); // Uncomment and declare TNode if needed
+static Scanner scanner = new Scanner(System.in); // Declare Scanner as static for global access
+
+
+
 // array with the names of 50 states in the United States and it's  declare as static for global access    
 static String[] states = {
         "Alabama", "Alaska", "Arizona", "Arkansas", "California",
@@ -16,16 +79,23 @@ static String[] states = {
         "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"
     };
 
-
-static Scanner scanner = new Scanner(System.in); // Declare Scanner as static for global access
+// add states method to the trie structure
+public static void addStatesToTrie() {
+    for (String state : states) {
+        usaTree.add(state);
+    }
+}
 
 ////Search function using the bad character rule of the Boyer-Moore algorithm -display the indices of the matches
 
 public static void search(String value) {
     System.out.println("Search functionality is not implemented yet.");
-    // Placeholder for search functionality
-    // You can implement the search logic here
-    // Return to the menu after search
+    
+    for (char theChar : value.toCharArray()) {
+       System.out.println(usaTree.subNode(theChar));
+}
+
+    
 }
 
 // display the text of the states in the United States
@@ -69,6 +139,7 @@ public static void menu() {
 }  
 
 
+
     public static void main(String[] args) {
     //introduction to the program
     System.out.println("Welcome to the  Searching Text & String Data Program!");   
@@ -79,7 +150,7 @@ public static void menu() {
     System.out.println(" press enter to continue");
     // allow user to  have time to read the introduction before seeing the menu
     String enter = scanner.nextLine(); // Wait for user to press enter
-
+    addStatesToTrie();
     menu(); // Call the menu function to start the program
 }
 }
