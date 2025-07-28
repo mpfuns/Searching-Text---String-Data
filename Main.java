@@ -120,13 +120,13 @@ public static void menu() {
     choice = scanner.nextInt();
     switch (choice) {
        
-        case 1:
+         case 1:
+            displayText();
+            break;
+        case 2:
             System.out.print("Enter the value to add: ");
             String searchValue = scanner.next();
             search(searchValue);
-            break;
-         case 2:
-            displayText();
             break;
         case 3:
             System.out.println("Exiting program.");
@@ -148,9 +148,9 @@ public static void menu() {
     System.out.println("You would enter 3 and not the word chicken, then press enter.");
     System.out.println("There  will  be a time when you  will be next to type in letters which  will  be when you search.");
     System.out.println(" press enter to continue");
+    addStatesToTrie();
     // allow user to  have time to read the introduction before seeing the menu
     String enter = scanner.nextLine(); // Wait for user to press enter
-    addStatesToTrie();
     menu(); // Call the menu function to start the program
 }
 }
