@@ -1,3 +1,4 @@
+
 import java.util.*;
 
 public class Main {
@@ -100,49 +101,69 @@ public static void search(String value) {
         System.out.println("Results: " + results);
         return;
     }
+    // If no results found, return early
+    if (results.isEmpty()) {
+        System.out.println("Findings:");
+        System.out.println("No matches found.");
+        return;
+    }
     // If the value is longer than one character, we will use the Boyer-Moore algorithm
-    //bad character rule from Boyer-Moore algorithm steps 
      String pattern = value.toLowerCase();
+     String data = String.join(",", results);
+     ArrayList<String> findings = new ArrayList<>();
 
-  //1. if not  in pattern (value) string , then skip pattern.length
-  //2. if in pattern (value) string, then shift the pattern -  lastindex - index of the most right mismatch  character 
-  //3. overlook at the last character in  pattern  string 
-
-
-// Bad Character Rule Explanation:
-// 1. If the mismatched character is NOT in the pattern at all,
-//    then shift the pattern completely past the mismatched position.
-//    => Shift by the full length of the pattern.
-//
-// 2. If the mismatched character IS in the pattern,
-//    then align the rightmost occurrence of that character in the pattern
-//    with its position in the text where the mismatch occurred.
-//    => Shift by: (index of mismatch in text) - (last index of the mismatched character in pattern)
-//
-// 3. Begin comparisons from the last character in the pattern moving left,
-//    allowing for smarter and larger skips with each mismatch.
-
-    System.out.println("Results: " + results);
-
-  /* 
-   // Step 1: Add patterns to Trie
-trie.insert("Texas");
-trie.insert("Ohio");
-trie.insert("California");
-
-// Step 2: Retrieve matches based on user input prefix
-List<String> matchedPatterns = trie.searchByPrefix("O");
-
-// Step 3: Run Boyer-Moore on each matched pattern
-for (String pattern : matchedPatterns) {
-    boyerMooreSearch(documentText, pattern); // documentText is your main corpus
-}
-// Step 4: Display results
+    System.out.println("data: " + data);
    
+       for(int i = 0; i < data.length(); ) {
+        int j = pattern.length() - 1; // Start from the end of the pattern
+        while (j >= 0 && i + j < data.length() && pattern.charAt(j) == data.charAt(i + j)) {
+            j--; // Move left in the pattern
+        }
+        if (j < 0) {
+            // Match found at index i
+            System.out.println("Match found at index: " + i);
+            String matchSlice = data.substring(i, data.length());
+            String match = matchSlice.split(",")[0]; // Get the first part of the match
+             
+             if (!findings.contains(match)) {
+                findings.add(match); // Add to findings if not already present
+             }
+            i += (i + pattern.length() < data.length()) ? pattern.length() : 1; // Shift by pattern length or 1
+        } 
+        //if (value)pattern not in string section , then  shift  search  section 
+        else {
+            if (i + j < data.length()) {
+                char mismatchChar = data.charAt(i + j);
+                int lastIndex = pattern.lastIndexOf(mismatchChar);
+                if (lastIndex == -1) {
+                    // Mismatched character not in pattern, shift by full length
+                    i += pattern.length();
+                } else {
+                    // Shift by the difference between mismatch index and last index in pattern
+                    i += Math.max(1, j - lastIndex);
+                }
+            } else {
+                // If out of bounds, break the loop to avoid exception
+                break;
+            }
+        }
+       
+    }
+    // Display the findings
+    System.out.println("Findings:");
+    if (findings.isEmpty()) {
+        System.out.println("No matches found.");
+        return;
+    }
+    else{
+
+        for( String finding : findings) {
+        finding = finding.substring(0, 1).toUpperCase() + finding.substring(1); // Capitalize the first letter
+        System.out.println(finding); 
+    }
+    }
+    
    
-   */
-  
-  
     
        
 }
