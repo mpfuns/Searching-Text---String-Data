@@ -205,6 +205,7 @@ public static void menu() {
             System.exit(0);
         default:
             System.out.println("Invalid choice. Please try again.");
+            menu();
     }
   
 }  
