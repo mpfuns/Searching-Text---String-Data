@@ -32,22 +32,31 @@ public class Main {
         }
         currentNode.endOfWord = true; // Mark the end of the word
     }
-    
+    // Helper method to recursively collect words
+    private void collectWords(TrieNode node, String prefix, List<String> result) {
+    if (node.endOfWord) {
+        result.add(prefix); // Found a full word
+    }
+    for (Map.Entry<Character, TrieNode> entry : node.children.entrySet()) {
+        collectWords(entry.getValue(), prefix + entry.getKey(), result);
+    }
+}
     /// pass back  all words that match the prefix
     public List<String> searchByPrefix(String prefix) {
 
         List<String> results = new ArrayList<>();
-        TrieNode currentNode = root;
+        TrieNode current = root;
 
         // Traverse the Trie to find the prefix
         for (char c : prefix.toCharArray()) {
-            currentNode = currentNode.children.get(c);
-            if (currentNode == null) {
+            current = current.children.get(c);
+            if (current == null) {
                 return results; // No words with this prefix
             }
         }
         // If we reach here, we found the prefix, now collect all words
-        System.out.println("Found prefix: " + prefix + ", collecting words..." + results);
+        
+         collectWords(current, prefix, results);
         return results;
     }    
 
@@ -75,7 +84,7 @@ static String[] states = {
 // add states method to the trie structure
 public static void addStatesToTrie() {
     for (String state : states) {
-        usaTree.insert(state);
+        usaTree.insert(state.toLowerCase());
     }
 }
 
@@ -84,7 +93,35 @@ public static void addStatesToTrie() {
 
 public static void search(String value) {
     System.out.println("Search functionality is not implemented yet.");
-    List<String> results = usaTree.searchByPrefix("o");
+    char[] charValue = value.toCharArray();
+    // cut down the search to the first character from value 
+    List<String> results = usaTree.searchByPrefix(String.valueOf(Character.toLowerCase(charValue[0])));
+    if (charValue.length == 1) {
+        System.out.println("Results: " + results);
+        return;
+    }
+    // If the value is longer than one character, we will use the Boyer-Moore algorithm
+    //bad character rule from Boyer-Moore algorithm steps 
+     String pattern = value.toLowerCase();
+
+  //1. if not  in pattern (value) string , then skip pattern.length
+  //2. if in pattern (value) string, then shift the pattern -  lastindex - index of the most right mismatch  character 
+  //3. overlook at the last character in  pattern  string 
+
+
+// Bad Character Rule Explanation:
+// 1. If the mismatched character is NOT in the pattern at all,
+//    then shift the pattern completely past the mismatched position.
+//    => Shift by the full length of the pattern.
+//
+// 2. If the mismatched character IS in the pattern,
+//    then align the rightmost occurrence of that character in the pattern
+//    with its position in the text where the mismatch occurred.
+//    => Shift by: (index of mismatch in text) - (last index of the mismatched character in pattern)
+//
+// 3. Begin comparisons from the last character in the pattern moving left,
+//    allowing for smarter and larger skips with each mismatch.
+
     System.out.println("Results: " + results);
 
   /* 
@@ -106,26 +143,8 @@ for (String pattern : matchedPatterns) {
    */
   
   
-  
-    // working on trie 
-  
-  
-  
-  
-    //bad  character rule steps 
-
-  //1. if not  in pattern (value) string , then skip pattern.length
-  //2. if in pattern (value) string, then shift the pattern -  lastindex - index of the most right mismatch  character 
-  //3. overlook at the last character in  pattern  string 
     
-
-
-    
- /* for (char theChar : value.toCharArray()) {
-       System.out.println(usaTree.subNode(theChar));
-}*/ 
-
-    
+       
 }
 
 // display the text of the states in the United States
