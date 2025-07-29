@@ -110,8 +110,6 @@ public static void search(String value) {
      String pattern = value.toLowerCase();
      String data = String.join(",", results);
      ArrayList<String> findings = new ArrayList<>();
-
-    System.out.println("data: " + data);
    
        for(int i = 0; i < data.length(); ) {
         int j = pattern.length() - 1; // Start from the end of the pattern
@@ -120,7 +118,7 @@ public static void search(String value) {
         }
         if (j < 0) {
             // Match found at index i
-            System.out.println("Match found at index: " + i);
+           
             String matchSlice = data.substring(i, data.length());
             String match = matchSlice.split(",")[0]; // Get the first part of the match
              
