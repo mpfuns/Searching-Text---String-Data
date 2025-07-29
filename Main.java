@@ -1,66 +1,59 @@
-import java.util.Scanner;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Main {
- 
-// Simple TNode class definition
 
-static class TNode {
-    String value;
-    TNode left, right;
-    List<TNode> nodeList; // For trie-like children
+// TrieNode class to represent each node in the Trie
+ static class TrieNode{
+   Map<Character, TrieNode> children;
+   boolean endOfWord; // Indicates if this node marks the end of a word
 
-    TNode() {
-        this.value = null;
-        this.left = null;
-        this.right = null;
-        this.nodeList = new ArrayList<>();
+    // Constructor to initialize the TrieNode
+    TrieNode() {
+         children = new HashMap<>();
+         endOfWord = false; // Initialize to false
+    }
+     
+ }
+
+ // Trie class to manage the Trie structure
+   static class Trie {
+    private TrieNode root;
+
+    // Constructor to initialize the Trie
+    public Trie() {
+        root = new TrieNode();
     }
 
-    TNode(String value) {
-        this.value = value;
-        this.left = null;
-        this.right = null;
-        this.nodeList = new ArrayList<>();
+    // Method to insert a word into the Trie
+    public void insert(String word) {
+        TrieNode currentNode = root;
+        for (char c : word.toCharArray()) {
+            currentNode = currentNode.children.computeIfAbsent(c, k -> new TrieNode());
+        }
+        currentNode.endOfWord = true; // Mark the end of the word
     }
+    
+    /// pass back  all words that match the prefix
+    public List<String> searchByPrefix(String prefix) {
 
-    // New constructor to accept a char
-    TNode(char value) {
-        this.value = String.valueOf(value);
-        this.left = null;
-        this.right = null;
-        this.nodeList = new ArrayList<>();
-    }
+        List<String> results = new ArrayList<>();
+        TrieNode currentNode = root;
 
-    // Method to find a child node with the given char
-    public TNode subNode(char c) {
-        for (TNode child : this.nodeList) {
-            if (child.value != null && child.value.equals(String.valueOf(c))) {
-                return child;
+        // Traverse the Trie to find the prefix
+        for (char c : prefix.toCharArray()) {
+            currentNode = currentNode.children.get(c);
+            if (currentNode == null) {
+                return results; // No words with this prefix
             }
         }
-        return null;
-    }
-    //add method to add a new word to the trie structure 
-    public void add(String theWord) {
-        TNode myNode = usaTree;
-        for (char theChar : theWord.toCharArray()) {
-            TNode childNode = myNode.subNode(theChar);
-            if (childNode != null)
-                myNode = childNode;
-            else {
-                TNode newChild = new TNode(theChar);
-                myNode.nodeList.add(newChild);
-                myNode = newChild;
-            }
-        }
-    }
+        // If we reach here, we found the prefix, now collect all words
+        System.out.println("Found prefix: " + prefix + ", collecting words..." + results);
+        return results;
+    }    
+
 }
 
-
-static TNode usaTree = new TNode(); // Uncomment and declare TNode if needed
+ static Trie usaTree = new Trie(); 
 static Scanner scanner = new Scanner(System.in); // Declare Scanner as static for global access
 
 
@@ -82,18 +75,55 @@ static String[] states = {
 // add states method to the trie structure
 public static void addStatesToTrie() {
     for (String state : states) {
-        usaTree.add(state);
+        usaTree.insert(state);
     }
 }
+
 
 ////Search function using the bad character rule of the Boyer-Moore algorithm -display the indices of the matches
 
 public static void search(String value) {
     System.out.println("Search functionality is not implemented yet.");
-    
-    for (char theChar : value.toCharArray()) {
-       System.out.println(usaTree.subNode(theChar));
+    List<String> results = usaTree.searchByPrefix("o");
+    System.out.println("Results: " + results);
+
+  /* 
+   // Step 1: Add patterns to Trie
+trie.insert("Texas");
+trie.insert("Ohio");
+trie.insert("California");
+
+// Step 2: Retrieve matches based on user input prefix
+List<String> matchedPatterns = trie.searchByPrefix("O");
+
+// Step 3: Run Boyer-Moore on each matched pattern
+for (String pattern : matchedPatterns) {
+    boyerMooreSearch(documentText, pattern); // documentText is your main corpus
 }
+// Step 4: Display results
+   
+   
+   */
+  
+  
+  
+    // working on trie 
+  
+  
+  
+  
+    //bad  character rule steps 
+
+  //1. if not  in pattern (value) string , then skip pattern.length
+  //2. if in pattern (value) string, then shift the pattern -  lastindex - index of the most right mismatch  character 
+  //3. overlook at the last character in  pattern  string 
+    
+
+
+    
+ /* for (char theChar : value.toCharArray()) {
+       System.out.println(usaTree.subNode(theChar));
+}*/ 
 
     
 }
@@ -112,7 +142,7 @@ public static void menu() {
      int choice;
     String[] options = {"Display the text", "Search", "Exit program"};
     // Display the menu options
-       System.out.println("Binary Search Tree Menu:");  
+       System.out.println(" Searching Text & String Data Menu:");  
     for (int i = 0; i < options.length; i++) {
         System.out.println((i + 1) + ". " + options[i]);
     }
@@ -122,9 +152,10 @@ public static void menu() {
        
          case 1:
             displayText();
+            menu();
             break;
         case 2:
-            System.out.print("Enter the value to add: ");
+            System.out.print("Enter the value to search: ");
             String searchValue = scanner.next();
             search(searchValue);
             break;
