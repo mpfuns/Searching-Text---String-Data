@@ -93,7 +93,6 @@ public static void addStatesToTrie() {
 ////Search function using the bad character rule of the Boyer-Moore algorithm -display the indices of the matches
 
 public static void search(String value) {
-    System.out.println("Search functionality is not implemented yet.");
     char[] charValue = value.toCharArray();
     // cut down the search to the first character from value 
     List<String> results = usaTree.searchByPrefix(String.valueOf(Character.toLowerCase(charValue[0])));
@@ -198,6 +197,7 @@ public static void menu() {
             System.out.print("Enter the value to search: ");
             String searchValue = scanner.next();
             search(searchValue);
+            menu();
             break;
         case 3:
             System.out.println("Exiting program.");
