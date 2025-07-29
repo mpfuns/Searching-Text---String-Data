@@ -96,7 +96,7 @@ public static void search(String value) {
     char[] charValue = value.toCharArray();
     // cut down the search to the first character from value 
     List<String> results = usaTree.searchByPrefix(String.valueOf(Character.toLowerCase(charValue[0])));
-    if (charValue.length == 1) {
+    if (charValue.length == 1 && !results.isEmpty()) {
         System.out.println("Results: " + results);
         return;
     }
