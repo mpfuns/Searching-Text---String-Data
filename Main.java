@@ -1,6 +1,5 @@
 
 import java.util.*;
-
 public class Main {
 
 // TrieNode class to represent each node in the Trie
@@ -219,8 +218,9 @@ public static void menu() {
     System.out.println("There  will  be a time when you  will be next to type in letters which  will  be when you search.");
     System.out.println(" press enter to continue");
     addStatesToTrie();
-    // allow user to  have time to read the introduction before seeing the menu
-    String enter = scanner.nextLine(); // Wait for user to press enter
+    // allow user to  have time to read the introduction before seeing the menu 
+    String enter = scanner.nextLine(); // Wait for user to press enter 
     menu(); // Call the menu function to start the program
 }
 }
+
